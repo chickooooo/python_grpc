@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+service OrderService {
+    // Unary RPC to place an order for pizza
+    rpc PlaceOrder (OrderRequest) returns (OrderResponse);
+
+    // Server streaming RPC to get status updates on a pizza order
+    rpc StreamOrderStatus (StatusRequest) returns (stream StatusResponse);
+}
+
+message OrderRequest {
+    int32 size = 1;
+    repeated Topping toppings = 2;
+    string customer_id = 3;
+}
+
+enum Topping {
+    TOPPING_UNSPECIFIED = 0;
+    TOPPING_PEPPORONI = 1;
+    TOPPING_JALAPENO = 2;
+}
+
+message OrderResponse {
+    int32 status = 1;
+    string order_id = 2;
+}
+
+message StatusRequest {
+    string order_id = 1;
+}
+
+message StatusResponse {
+    OrderStatus status = 1;
+}
+
+enum OrderStatus {
+    OrderStatus_UNSPECIFIED = 0;
+    OrderStatus_RECEIVED = 1;
+    OrderStatus_INPROGRESS = 2;
+    OrderStatus_COMPLETED = 3;
+    OrderStatus_CANCELLED = 4;
+}
